@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlowSync — Work smarter, ship faster</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --brand:#1a1a2e;
+      --accent:#6c63ff;
+      --accent2:#ff6584;
+      --bg:#f8f7ff;
+      --surface:#fff;
+      --text:#1a1a2e;
+      --muted:#64648a;
+      --border:rgba(108,99,255,0.15);
+      --radius:14px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+    h1,h2,h3,.logo{font-family:'Sora',sans-serif}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(248,247,255,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 5%}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{font-size:1.3rem;font-weight:700;color:var(--accent);letter-spacing:-0.5px;text-decoration:none}
+    .logo span{color:var(--text)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--accent)}
+    .nav-cta{background:var(--accent);color:#fff;border:none;padding:.5rem 1.3rem;border-radius:8px;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(108,99,255,.38)}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+    .mobile-menu{display:none;flex-direction:column;gap:.25rem;background:var(--surface);border-top:1px solid var(--border);padding:1rem 5%}
+    .mobile-menu a{text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:500;padding:.6rem 0;border-bottom:1px solid var(--border);transition:color .2s}
+    .mobile-menu a:hover{color:var(--accent)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu.open{display:flex}
+
+    .hero-wrap{max-width:1100px;margin:0 auto;padding:7rem 5% 5rem}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    .hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(108,99,255,.1);color:var(--accent);padding:.35rem .9rem;border-radius:50px;font-size:.8rem;font-weight:600;margin-bottom:1.5rem;border:1px solid rgba(108,99,255,.2)}
+    .hero h1{font-size:3.2rem;font-weight:700;line-height:1.15;letter-spacing:-1.5px;margin-bottom:1.25rem}
+    .hero h1 .hl{color:var(--accent)}
+    .hero-sub{font-size:1.1rem;color:var(--muted);margin-bottom:2rem;max-width:440px}
+    .hero-btns{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:.8rem 1.75rem;border-radius:10px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(108,99,255,.4)}
+    .btn-ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent);padding:.8rem 1.75rem;border-radius:10px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s,color .2s}
+    .btn-ghost:hover{background:var(--accent);color:#fff}
+    .social-proof{display:flex;align-items:center;gap:.75rem;margin-top:1.5rem}
+    .avatars{display:flex}
+    .avatars span{width:30px;height:30px;border-radius:50%;border:2px solid #fff;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff}
+    .avatars span:first-child{margin-left:0}
+    .social-proof small{font-size:.82rem;color:var(--muted)}
+    .social-proof small b{color:var(--text)}
+
+    .hero-visual{position:relative;padding-top:16px;padding-bottom:16px}
+    .hero-card{background:var(--surface);border-radius:20px;border:1px solid var(--border);padding:1.75rem;box-shadow:0 20px 60px rgba(108,99,255,.12);position:relative;overflow:hidden}
+    .hero-card::before{content:'';position:absolute;top:-60px;right:-60px;width:160px;height:160px;background:radial-gradient(circle,rgba(108,99,255,.15) 0%,transparent 70%);pointer-events:none}
+    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    .card-title{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:600}
+    .badge-green{background:#e8faf0;color:#1a7c4a;padding:.2rem .65rem;border-radius:50px;font-size:.75rem;font-weight:600}
+    .metric-row{display:flex;gap:1rem;margin-bottom:1.25rem}
+    .metric{flex:1;background:var(--bg);border-radius:10px;padding:.85rem;text-align:center}
+    .metric-val{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--accent)}
+    .metric-label{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+    .mini-bar{height:6px;background:#ebe9ff;border-radius:3px;margin-bottom:.6rem;overflow:hidden}
+    .mini-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .bar-row{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+    .floating-tag{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.5rem .9rem;font-size:.78rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+
+    section{padding:5rem 5%}
+    .section-inner{max-width:1100px;margin:0 auto}
+    .section-label{font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+    .section-title{font-size:2.25rem;font-weight:700;letter-spacing:-1px;margin-bottom:1rem}
+    .section-sub{font-size:1.05rem;color:var(--muted);max-width:520px}
+
+    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;transition:transform .2s,box-shadow .2s,border-color .2s}
+    .feat-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(108,99,255,.12);border-color:rgba(108,99,255,.35)}
+    .feat-icon{width:48px;height:48px;border-radius:12px;background:rgba(108,99,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:1rem}
+    .feat-card h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:600;margin-bottom:.5rem}
+    .feat-card p{font-size:.88rem;color:var(--muted);line-height:1.65}
+
+    .trusted{background:var(--surface);padding:3rem 5%;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .trusted-inner{max-width:1100px;margin:0 auto;text-align:center}
+    .trusted p{font-size:.82rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+    .logo-row{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap}
+    .logo-pill{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.5rem 1.25rem;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:700;color:var(--muted);letter-spacing:.5px}
+
+    .pricing{background:#fff}
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .price-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;transition:transform .2s,box-shadow .2s}
+    .price-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(108,99,255,.1)}
+    .price-card.featured{background:var(--accent);border-color:var(--accent);color:#fff}
+    .recommend-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#ff6584;color:#fff;padding:.3rem 1rem;border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap;font-family:'Sora',sans-serif}
+    .plan-name{font-family:'Sora',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+    .price-card.featured .plan-name{color:rgba(255,255,255,.6)}
+    .price-val{font-family:'Sora',sans-serif;font-size:2.75rem;font-weight:700;letter-spacing:-2px;margin-bottom:.25rem;color:var(--text)}
+    .price-card.featured .price-val{color:#fff}
+    .price-val span{font-size:1rem;font-weight:500;letter-spacing:0}
+    .price-desc{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem}
+    .price-card.featured .price-desc{color:rgba(255,255,255,.75)}
+    .price-feat{list-style:none;margin-bottom:2rem}
+    .price-feat li{font-size:.88rem;color:var(--muted);padding:.4rem 0;display:flex;align-items:center;gap:.5rem}
+    .price-feat li::before{content:'✓';font-weight:700;color:var(--accent);font-size:.85rem}
+    .price-card.featured .price-feat li{color:rgba(255,255,255,.8)}
+    .price-card.featured .price-feat li::before{color:#fff}
+    .price-btn{width:100%;padding:.8rem;border-radius:10px;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .price-btn.light{background:transparent;border:1.5px solid var(--accent);color:var(--accent)}
+    .price-btn.light:hover{background:var(--accent);color:#fff}
+    .price-btn.dark{background:#fff;border:1.5px solid transparent;color:var(--accent)}
+    .price-btn.dark:hover{opacity:.88}
+
+    .testimonials{background:var(--bg)}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .testi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem}
+    .testi-stars{color:#f9a826;font-size:.9rem;margin-bottom:.75rem}
+    .testi-text{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-style:italic}
+    .testi-author{display:flex;align-items:center;gap:.75rem}
+    .testi-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff}
+    .testi-name{font-family:'Sora',sans-serif;font-size:.88rem;font-weight:600}
+    .testi-role{font-size:.78rem;color:var(--muted)}
+
+    .cta-section{background:linear-gradient(135deg,var(--accent) 0%,#4b3fcb 100%);padding:5rem 5%}
+    .cta-inner{max-width:700px;margin:0 auto;text-align:center;color:#fff}
+    .cta-inner h2{font-size:2.5rem;font-weight:700;letter-spacing:-1.5px;margin-bottom:1rem}
+    .cta-inner p{font-size:1.05rem;color:rgba(255,255,255,.8);margin-bottom:2.5rem}
+    .btn-white{background:#fff;color:var(--accent);border:none;padding:.9rem 2.25rem;border-radius:10px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.2)}
+    .cta-note{font-size:.8rem;color:rgba(255,255,255,.55);margin-top:1rem}
+
+    footer{background:var(--brand);color:rgba(255,255,255,.65);padding:4rem 5% 2rem}
+    .footer-top{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    .footer-brand .logo-f{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:.75rem}
+    .footer-brand p{font-size:.85rem;color:rgba(255,255,255,.45);line-height:1.7;max-width:220px}
+    .footer-col h4{font-family:'Sora',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-col ul a{text-decoration:none;color:rgba(255,255,255,.5);font-size:.85rem;transition:color .2s}
+    .footer-col ul a:hover{color:#fff}
+    .footer-bottom{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-top:1.75rem}
+    .footer-bottom small{font-size:.8rem;color:rgba(255,255,255,.3)}
+    .footer-socials{display:flex;gap:.6rem}
+    .social-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.82rem;cursor:pointer;transition:background .2s,transform .15s;color:rgba(255,255,255,.55);text-decoration:none}
+    .social-btn:hover{background:rgba(108,99,255,.5);transform:translateY(-2px);color:#fff}
+
+    @media(max-width:960px){
+      .hero{grid-template-columns:1fr;text-align:center;gap:3rem;padding-top:4rem}
+      .hero-sub{margin:0 auto 2rem}
+      .hero-btns{justify-content:center}
+      .social-proof{justify-content:center}
+      .features-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .footer-top{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:600px){
+      .hero h1{font-size:2.1rem}
+      .section-title{font-size:1.75rem}
+      .features-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr}
+      .footer-top{grid-template-columns:1fr}
+      .cta-inner h2{font-size:1.9rem}
+      .metric-row{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">flow<span>sync</span></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <button class="nav-cta">Get started free</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#">Blog</a>
+    <a href="#" style="color:var(--accent);font-weight:600">Get started free →</a>
+  </div>
+</nav>
+
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">✦ Trusted by 12,000+ teams worldwide</div>
+      <h1>Work smarter,<br>ship <span class="hl">faster</span> together</h1>
+      <p class="hero-sub">FlowSync brings your team, tools, and workflows into one beautifully simple platform — built for modern product teams.</p>
+      <div class="hero-btns">
+        <button class="btn-primary">Start for free</button>
+        <button class="btn-ghost">Watch demo →</button>
+      </div>
+      <div class="social-proof">
+        <div class="avatars">
+          <span style="background:#6c63ff">AL</span>
+          <span style="background:#ff6584">MK</span>
+          <span style="background:#43c59e">JR</span>
+          <span style="background:#f9a826">SW</span>
+          <span style="background:#4b3fcb">TP</span>
+        </div>
+        <small><b>4,200+ teams</b> joined this month · No credit card needed</small>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="floating-tag" style="top:-16px;right:24px;color:var(--accent)">✦ AI-powered</div>
+        <div class="card-header">
+          <span class="card-title">Team Performance</span>
+          <span class="badge-green">↑ 24% this week</span>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="metric-val">98%</div><div class="metric-label">On-time delivery</div></div>
+          <div class="metric"><div class="metric-val">2.4x</div><div class="metric-label">Faster shipping</div></div>
+          <div class="metric"><div class="metric-val">4.9★</div><div class="metric-label">Team rating</div></div>
+        </div>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:82%"></div></div>
+        <div class="bar-row"><span>Velocity score</span><span>82 / 100</span></div>
+        <div style="margin-top:.75rem">
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:67%;background:linear-gradient(90deg,#43c59e,#1a7c4a)"></div></div>
+          <div class="bar-row"><span>Collaboration index</span><span>67 / 100</span></div>
+        </div>
+        <div style="margin-top:.75rem">
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:91%;background:linear-gradient(90deg,#f9a826,#ff6584)"></div></div>
+          <div class="bar-row"><span>Delivery streak</span><span>91 / 100</span></div>
+        </div>
+        <div class="floating-tag" style="bottom:-16px;left:24px;color:#1a7c4a">✓ Synced just now</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="trusted">
+  <div class="trusted-inner">
+    <p>Trusted by teams at</p>
+    <div class="logo-row">
+      <div class="logo-pill">Notion</div>
+      <div class="logo-pill">Linear</div>
+      <div class="logo-pill">Vercel</div>
+      <div class="logo-pill">Stripe</div>
+      <div class="logo-pill">Figma</div>
+      <div class="logo-pill">Loom</div>
+    </div>
+  </div>
+</div>
+
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything your team needs</h2>
+    <p class="section-sub">Powerful tools wrapped in a clean, distraction-free interface that your team will actually love using.</p>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Real-time Collaboration</h3><p>Work side-by-side with your team in real time. See live edits, comments, and cursor presence.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧠</div><h3>AI Smart Summaries</h3><p>Get instant, intelligent summaries of your meetings, tasks, and project history in seconds.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔗</div><h3>Deep Integrations</h3><p>Connect with 100+ tools — GitHub, Figma, Slack, Jira, and more without switching tabs.</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3>Actionable Analytics</h3><p>Visual dashboards tracking team velocity, blockers, and output — updated in real time.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h3>Enterprise Security</h3><p>SOC 2 Type II, SSO, end-to-end encryption, and granular permissions built in from day one.</p></div>
+      <div class="feat-card"><div class="feat-icon">🚀</div><h3>Automated Workflows</h3><p>Build powerful no-code automations so your team can focus on what actually moves the needle.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="pricing">
+  <div class="section-inner">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Simple, honest pricing</h2>
+    <p class="section-sub">No hidden fees. No surprises. Cancel anytime.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="plan-name">Starter</div>
+        <div class="price-val">$0<span>/mo</span></div>
+        <div class="price-desc">Perfect for solo creators and small projects just getting started.</div>
+        <ul class="price-feat">
+          <li>Up to 3 projects</li><li>5 team members</li><li>Basic analytics</li><li>2 GB storage</li><li>Community support</li>
+        </ul>
+        <button class="price-btn light">Get started free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="recommend-badge">⭐ Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="price-val">$29<span>/mo</span></div>
+        <div class="price-desc">For growing teams that need power, speed, and collaboration at scale.</div>
+        <ul class="price-feat">
+          <li>Unlimited projects</li><li>Unlimited members</li><li>Advanced analytics</li><li>100 GB storage</li><li>Priority support</li><li>AI smart summaries</li><li>Custom integrations</li>
+        </ul>
+        <button class="price-btn dark">Start Pro trial</button>
+      </div>
+      <div class="price-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="price-val">Custom</div>
+        <div class="price-desc">Tailored solutions for large organizations with compliance needs.</div>
+        <ul class="price-feat">
+          <li>Everything in Pro</li><li>SSO & SAML</li><li>Advanced security</li><li>Dedicated SLA</li><li>Onboarding & training</li><li>Custom contracts</li>
+        </ul>
+        <button class="price-btn light">Talk to sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="testimonials">
+  <div class="section-inner">
+    <div class="section-label">Testimonials</div>
+    <h2 class="section-title">Loved by teams everywhere</h2>
+    <p class="section-sub">Don't just take our word for it — here's what our users have to say.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"FlowSync has completely changed how our team collaborates. We ship twice as fast and everyone is always in sync."</p>
+        <div class="testi-author"><div class="testi-avatar" style="background:#6c63ff">AM</div><div><div class="testi-name">Alex Morgan</div><div class="testi-role">Head of Product · Vercel</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The AI summaries alone save me an hour a day. I can jump into any project and know exactly what's happening in 30 seconds."</p>
+        <div class="testi-author"><div class="testi-avatar" style="background:#ff6584">SK</div><div><div class="testi-name">Sara Kim</div><div class="testi-role">Engineering Lead · Linear</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"We evaluated 8 tools before choosing FlowSync. The integrations, the design, the speed — nothing else comes close."</p>
+        <div class="testi-author"><div class="testi-avatar" style="background:#43c59e">JP</div><div><div class="testi-name">James Park</div><div class="testi-role">CTO · Notion</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to unlock your team's potential?</h2>
+    <p>Join thousands of teams who have transformed the way they work. Free to start. No credit card needed.</p>
+    <button class="btn-white">Try FlowSync free — it's on us →</button>
+    <p class="cta-note">Free forever plan · No credit card required · Cancel anytime</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo-f">flowsync</div>
+      <p>The modern workspace for high-performing product teams. Built with ❤️ for makers.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Changelog</a></li><li><a href="#">Roadmap</a></li><li><a href="#">Integrations</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Security</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <small>© 2025 FlowSync Inc. All rights reserved.</small>
+    <div class="footer-socials">
+      <a class="social-btn" href="#" title="Twitter">𝕏</a>
+      <a class="social-btn" href="#" title="LinkedIn">in</a>
+      <a class="social-btn" href="#" title="GitHub">gh</a>
+      <a class="social-btn" href="#" title="YouTube">▶</a>
+      <a class="social-btn" href="#" title="Discord">dc</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.remove('open');
+    });
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feat-card, .price-card, .testi-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
